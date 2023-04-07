@@ -1,5 +1,6 @@
 """
 simple file to get few images from google for testing image annotation process
+@https://stackoverflow.com/questions/51676983/python-error-downloading-image-from-web-http-error-400-bad-request
 """
 
 import urllib.request as ulib

@@ -1,3 +1,5 @@
+"""generate xml for bounding boxes from draw_box.py"""
+
 import os
 import cv2
 from lxml import etree
@@ -7,11 +9,11 @@ def write_xml(folder, img, objects, tl, br, savedir):
     if not os.path.isdir(savedir):
         os.mkdir(savedir)
 
-    image = cv2.imread(img.path)
+    image = cv2.imread(img)
     height, width, depth = image.shape
     annotation = ET.Element('annotation')
     ET.SubElement(annotation, 'folder').text = folder
-    ET.SubElement(annotation, 'filename').text = img.name
+    ET.SubElement(annotation, 'filename').text = img.split('/')[-1]
     ET.SubElement(annotation, 'segmented').text = '0'
     size = ET.SubElement(annotation, 'size')
     ET.SubElement(size, 'width').text = str(width)
@@ -34,14 +36,21 @@ def write_xml(folder, img, objects, tl, br, savedir):
     xml_str = ET.tostring(annotation)
     root = etree.fromstring(xml_str)
     xml_str = etree.tostring(root, pretty_print= True)
-    save_path = os.path.join(savedir, img.name.replace('png', 'xml'))
+    image_file = img.split('/')[-1]
+    if ".png" in image_file:
+        save_path = os.path.join(savedir, image_file.replace('png', 'xml'))
+    elif ".jpeg" in image_file:
+        save_path = os.path.join(savedir, image_file.replace('jpeg', 'xml'))
+    elif ".jpg" in image_file:
+        save_path = os.path.join(savedir, image_file.replace('jpg', 'xml'))
     with open(save_path, 'wb') as temp_xml:
         temp_xml.write(xml_str)
     # return xml_str
 
 if __name__ == '__main__':
     folder = 'images'
-    img = [im for im in os.scandir('images') if '000001' in im.name][0]
+    # img = [im for im in os.scandir('images') if '000001' in im.name][0]
+    ing = [im for im in os.walk('images') if '000001' in im.name][0]
     objects = ['fidget_spinner']
     tl = [(10, 10)]
     br= [(100, 100)]

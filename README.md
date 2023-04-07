@@ -4,3 +4,10 @@ then generate annotation for object detection running `draw_box.py` that draws a
 multiple, bounding box around the images
 
 saves the xml file if we press 'q' and saves it in annotation folder
+
+The directory structure would look like
+
+                image_annotation
+                        images
+                        annotation
+                        files (code)
